@@ -40,6 +40,24 @@ function spotifySong(){
 });
 }
 
+function movieTime(){
+    request("http://www.omdbapi.com/?t="+item+"&plot=short&tomatoes=true&r=json", function(error, data, body){
+      if(item == ""){
+        item = "Mr.Nobody"
+        var returnMovie = JSON.parse(data.body)
+        console.log(returnMovie)
+        console.log("\nTitle: "+ returnMovie.Title + "\nYear: "+ returnMovie.Year + "\nIMDB Rating: "+returnMovie.imdbRating+ "\nCountry: "+ returnMovie.Country + "\nLanguage: "+ returnMovie.Language + "\nActors: "+ returnMovie.Actors + "\nplot: " + returnMovie.Plot + "\nRotten Tomatoes Rating: "+ returnMovie.tomatoRating+ "\nRotten Tomatoes URL: " + returnMovie.tomatoURL)
+      }
+      else if (!error){
+        var returnMovie = JSON.parse(data.body)
+        console.log("\nTitle: "+ returnMovie.Title + "\nYear: "+ returnMovie.Year + "\nIMDB Rating: "+returnMovie.imdbRating+ "\nCountry: "+ returnMovie.Country + "\nLanguage: "+ returnMovie.Language + "\nActors: "+ returnMovie.Actors + "\nplot: " + returnMovie.Plot + "\nRotten Tomatoes Rating: "+ returnMovie.tomatoRating+ "\nRotten Tomatoes URL: " + returnMovie.tomatoURL)
+      }
+
+});
+}
+
+
+
 //commands processing
 if(command=="my-tweets") {
   getTwitter();
@@ -47,6 +65,8 @@ if(command=="my-tweets") {
 else if(command=="spotify-this-song") {
   spotifySong();
 }
-
+else if(command=="movie-this"){
+  movieTime();
+}
 
 
