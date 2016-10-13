@@ -19,8 +19,10 @@ function getTwitter(){
 var params = {screen_name: 'ZooJerzey'};
 tClient.get('statuses/user_timeline', params, function(error, tweets, response) {
   if (!error) {
-      for (i=0;i<20;i++){
-      console.log("Tweeted: "+ tweets[i].text + " on: "+ tweets[i].created_at)
+      for (i=0;i<4;i++){
+      console.log("\nTweeted: "+ tweets[i].text + " on: "+ tweets[i].created_at)
+      writeFile("\nTweeted: "+ tweets[i].text + " on: "+ tweets[i].created_at)
+
   }
 }
 });
@@ -35,8 +37,8 @@ function spotifySong(){
         return;
       }
         var search = data.tracks.items[0]
-        console.log("\nSong: " + search.name + "\nArtist: "+search.artists[0].name + "\nAlbum: " + search.album.name + "\nLink: " + search.preview_url)
-         
+        console.log("\nSong: " + search.name + " \nArtist: "+search.artists[0].name + " \nAlbum: " + search.album.name + " \nLink: " + search.preview_url)
+        writeFile("\nSong: " + search.name + " \nArtist: "+search.artists[0].name + " \nAlbum: " + search.album.name + " \nLink: " + search.preview_url) 
 });
 }
 
@@ -45,18 +47,36 @@ function movieTime(){
       if(item == ""){
         item = "Mr.Nobody"
         var returnMovie = JSON.parse(data.body)
-        console.log(returnMovie)
         console.log("\nTitle: "+ returnMovie.Title + "\nYear: "+ returnMovie.Year + "\nIMDB Rating: "+returnMovie.imdbRating+ "\nCountry: "+ returnMovie.Country + "\nLanguage: "+ returnMovie.Language + "\nActors: "+ returnMovie.Actors + "\nplot: " + returnMovie.Plot + "\nRotten Tomatoes Rating: "+ returnMovie.tomatoRating+ "\nRotten Tomatoes URL: " + returnMovie.tomatoURL)
+        writeFile("\nTitle: "+ returnMovie.Title + "\nYear: "+ returnMovie.Year + "\nIMDB Rating: "+returnMovie.imdbRating+ "\nCountry: "+ returnMovie.Country + "\nLanguage: "+ returnMovie.Language + "\nActors: "+ returnMovie.Actors + "\nplot: " + returnMovie.Plot + "\nRotten Tomatoes Rating: "+ returnMovie.tomatoRating+ "\nRotten Tomatoes URL: " + returnMovie.tomatoURL)
       }
       else if (!error){
         var returnMovie = JSON.parse(data.body)
         console.log("\nTitle: "+ returnMovie.Title + "\nYear: "+ returnMovie.Year + "\nIMDB Rating: "+returnMovie.imdbRating+ "\nCountry: "+ returnMovie.Country + "\nLanguage: "+ returnMovie.Language + "\nActors: "+ returnMovie.Actors + "\nplot: " + returnMovie.Plot + "\nRotten Tomatoes Rating: "+ returnMovie.tomatoRating+ "\nRotten Tomatoes URL: " + returnMovie.tomatoURL)
+        writeFile("\nTitle: "+ returnMovie.Title + "\nYear: "+ returnMovie.Year + "\nIMDB Rating: "+returnMovie.imdbRating+ "\nCountry: "+ returnMovie.Country + "\nLanguage: "+ returnMovie.Language + "\nActors: "+ returnMovie.Actors + "\nplot: " + returnMovie.Plot + "\nRotten Tomatoes Rating: "+ returnMovie.tomatoRating+ "\nRotten Tomatoes URL: " + returnMovie.tomatoURL)
       }
 
 });
 }
 
-
+function doTheThing(){
+  fs.readFile("random.txt", "utf8", function(error, data){
+    var array = data.split(",");
+    var command = array[0]
+    var item = array[1]
+    switch(command){
+      case "my-tweets":
+      getTwitter();
+      break;
+      case "spotify-this-song":
+      spotifySong();
+      break;
+      case "movie-this":
+      movieTIme();
+      break;
+    }
+  })
+}
 
 //commands processing
 if(command=="my-tweets") {
@@ -68,5 +88,21 @@ else if(command=="spotify-this-song") {
 else if(command=="movie-this"){
   movieTime();
 }
+else if (command=="do-what-it-says"){
+  doTheThing();
+}
 
 
+function writeFile(response){
+
+  fs.appendFile("log.txt","\r"+response, function(err) {
+  // If the code experiences any errors it will log the error to the console. 
+    if(err) {
+        return console.log(err);
+    }
+
+    // Otherwise, it will print: "movies.txt was updated!"
+    console.log("log.txt was updated!");
+
+}); 
+}
