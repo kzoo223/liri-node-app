@@ -42,6 +42,7 @@ function spotifySong(){
 });
 }
 
+//omdb function
 function movieTime(){
     request("http://www.omdbapi.com/?t="+item+"&plot=short&tomatoes=true&r=json", function(error, data, body){
       if(item == ""){
@@ -59,6 +60,7 @@ function movieTime(){
 });
 }
 
+//read from file function
 function doTheThing(){
   fs.readFile("random.txt", "utf8", function(error, data){
     var array = data.split(",");
@@ -93,15 +95,14 @@ else if (command=="do-what-it-says"){
 }
 
 
+//write to log file
 function writeFile(response){
 
   fs.appendFile("log.txt","\r"+response, function(err) {
-  // If the code experiences any errors it will log the error to the console. 
     if(err) {
         return console.log(err);
     }
 
-    // Otherwise, it will print: "movies.txt was updated!"
     console.log("log.txt was updated!");
 
 }); 
